@@ -1,0 +1,11 @@
+- name: julia
+  tags:
+    - install
+    - julia
+  block:
+  - name: Install Julia language
+    apt:
+      name: [julia]
+    become: true
+  - name: Install Julia language server
+    shell: julia -e 'using Pkg; Pkg.add("LanguageServer"); Pkg.update()'

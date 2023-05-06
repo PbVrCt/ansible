@@ -1,0 +1,28 @@
+- name: aws
+  tags:
+    - install
+    - aws
+  block:
+  - name: Download the AWS CLI zip file
+    get_url:
+      url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+      dest: /tmp/awscli.zip
+      mode: '0755'
+  - name: Unzip the AWS CLI zip file
+    unarchive:
+      src: /tmp/awscli.zip
+      dest: /tmp
+      remote_src: yes
+  - name: Install the AWS CLI
+    command: /tmp/aws/install
+    args:
+      creates: /usr/local/bin/aws
+  - name: Remove temporary AWS directory
+    ansible.builtin.file:
+      path: /tmp/aws
+      state: absent
+  - name: Install the AWS CDK
+    npm:
+      name: aws-cdk
+      global: yes
+      state: present

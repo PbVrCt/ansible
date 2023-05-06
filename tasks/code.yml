@@ -1,0 +1,39 @@
+- name: code
+  tags:
+    - install
+    - code
+  block:
+  - name: Install VSCode
+    apt:
+      name: [code]
+    become: true
+  - name: Update VSCode
+    become: true
+    ansible.builtin.apt:
+      name: code
+      state: latest
+    tags:
+      - install
+      - code
+      - update_vscode
+  - name: Install VSCode language server
+    shell: npm i -g vscode-langservers-extracted
+  - name: Install VSCode extensions
+    ansible.builtin.command: code --install-extension {{ item }}
+    loop:
+      - vscodevim.vim
+      - eamodio.gitlens
+      - ms-python.python
+      - dart-code.flutter
+      - dart-code.dart-code
+      - github.copilot
+      - amazonwebservices.aws-toolkit-vscode
+      - enkia.tokyo-night
+    become: true
+    become_user: "pablovarela"
+    environment:
+      PATH: "{{ ansible_env.PATH }}:/usr/local/bin:/usr/bin"
+    tags:
+      - install
+      - code
+      - code_extensions

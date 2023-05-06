@@ -1,0 +1,33 @@
+- name: i3
+  tags:
+    - install
+    - i3
+  block:
+  - name: Install i3
+    apt:
+      name: i3
+  - name: Install xbacklight for brightness control
+    apt:
+      name: xbacklight
+  - name: Install pipewire and pipewire-alsa for volume control. Install other utilities
+    apt:
+      name: ["brightnessctl", "pipewire", "pipewire-alsa", "pipewire-pulse", "bluez", "gnome-bluetooth", "indicator-bluetooth"]
+  - name: Install Polybar
+    apt:
+      name: polybar
+  - name: Ensure Polybar configuration directory exists
+    ansible.builtin.file:
+      path: /home/pablovarela/.config/polybar
+      state: directory
+      mode: '0755'
+  - name: Fix polybar directory permissions
+    ansible.builtin.file:
+      path: /home/pablovarela/.config/polybar
+      owner: pablovarela
+      group: pablovarela
+      recurse: yes
+      state: directory
+    become: yes
+  - name: Install i3 resurrect
+    pip:
+      name: i3-resurrect

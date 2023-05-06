@@ -1,0 +1,19 @@
+- name: docker
+  tags:
+    - install
+    - docker
+  block:
+  - name: Install Docker
+    apt:
+      name: ["docker.io"]
+    become: true
+    become_method: sudo
+  - name: Setup docker sock permissions
+    shell: chmod 666 /var/run/docker.sock
+    become: true
+    become_method: sudo
+  - name: Install Docker-compose
+    apt:
+      name: ["docker-compose"]
+    become: true
+    become_method: sudo

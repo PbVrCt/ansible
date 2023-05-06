@@ -1,0 +1,6 @@
+- name: github_cli
+  apt:
+    name: ["gh"]
+  tags:
+    - install
+    - github_cli

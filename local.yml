@@ -1,0 +1,35 @@
+- hosts: localhost
+  become: true
+  pre_tasks:
+  - name: Update Apt
+    become: true
+    apt:
+      force_apt_get: true
+      update_cache: true
+      state: present
+    tags:
+      - install
+      - core 
+  tasks:
+  - include: tasks/core.yml
+  - include: tasks/caps_esc.yml
+  - include: tasks/git.yml
+  - include: tasks/i3.yml
+  - include: tasks/tmux.yml
+  - include: tasks/fzf.yml
+  - include: tasks/python.yml
+  - include: tasks/docker.yml
+  - include: tasks/snapd.yml
+  - include: tasks/obsidian.yml
+  - include: tasks/qdirstat.yml
+  - include: tasks/node.yml
+  - include: tasks/zsh.yml
+  - include: tasks/fira_font.yml
+  - include: tasks/code.yml
+  - include: tasks/helix.yml
+  - include: tasks/chezmoi.yml
+  - include: tasks/aws.yml
+  - include: tasks/github_cli.yml
+  - include: tasks/pulsemeeter.yml
+  - include: tasks/julia.yml
+  # - include: tasks/flutter.yml

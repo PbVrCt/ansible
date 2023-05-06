@@ -1,0 +1,13 @@
+- name: fzf
+  tags:
+    - install
+    - fzf
+  block:
+  - name: Install fzf
+    apt:
+      name: fzf
+      state: present
+  - name: Install fd
+    apt:
+      name: fd-find
+      state: present

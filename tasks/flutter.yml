@@ -1,0 +1,150 @@
+- name: flutter
+  tags:
+    - install
+    - flutter
+  block:
+  - name: Install packages for the flutter installation
+    ansible.builtin.apt:
+      name:
+        - openjdk-11-jre
+        - openjdk-11-jdk
+        - android-sdk-platform-tools-common
+        - sdkmanager
+      state: present
+      update_cache: yes
+  - name: Download Flutter SDK
+    get_url:
+      url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.7.12-stable.tar.xz"
+      dest: "/tmp/flutter_linux_3.7.12-stable.tar.xz"
+      mode: '0644'
+  - name: Create Flutter SDK directory
+    ansible.builtin.file:
+      path: "/home/pablovarela/Android/flutter"
+      state: directory
+      owner: "pablovarela"
+      mode: '0755'
+  - name: Extract Flutter SDK
+    ansible.builtin.unarchive:
+      src: "/tmp/flutter_linux_3.7.12-stable.tar.xz"
+      dest: "/home/pablovarela/Android/"
+      remote_src: yes
+      owner: "pablovarela"
+  - name: Create Android and cmdline-tools directories
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+      owner: "pablovarela"
+      mode: '0755'
+    loop:
+      - /home/pablovarela/Android
+      - /home/pablovarela/Android/cmdline-tools
+  - name: Download Android Command Line Tools
+    get_url:
+      url: "https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip"
+      dest: "/tmp/commandlinetools-linux-9477386_latest.zip"
+      mode: '0644'
+  - name: Extract Android Command Line Tools
+    ansible.builtin.unarchive:
+      src: "/tmp/commandlinetools-linux-9477386_latest.zip"
+      dest: "/home/pablovarela/Android/cmdline-tools/"
+      remote_src: yes
+      owner: "pablovarela"
+      creates: "/home/pablovarela/Android/cmdline-tools/cmdline-tools"
+  - name: Move Flutter directory to Android
+    ansible.builtin.command:
+      cmd: "mv /snap/flutter/ /home/pablovarela/Android/"
+      creates: "/home/pablovarela/Android/flutter"
+  - name: Copy cmdline-tools folder to latest
+    ansible.builtin.copy:
+      src: "/home/pablovarela/Android/cmdline-tools/cmdline-tools/"
+      dest: "/home/pablovarela/Android/cmdline-tools/latest/"
+      remote_src: yes
+  - name: Create Android SDK directory
+    ansible.builtin.file:
+      path: "/opt/android-sdk"
+      state: directory
+      mode: '0755'
+      owner: pablovarela
+    become: true
+  - name: Install Android SDK packages
+    become: true
+    become_user: "pablovarela"
+    ansible.builtin.shell:
+      cmd: "source /home/pablovarela/.zshrc && {{ item }}"
+      executable: /bin/zsh
+    loop:
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager --install 'cmdline-tools;latest'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'system-images;android-29;default;x86_64'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'platforms;android-29'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'platform-tools'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'patcher;v4'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'emulator'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'build-tools;29.0.2'"
+      - "/home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager --licenses"
+  - name: Accept Android SDK licenses
+    become_user: "pablovarela"
+    ansible.builtin.shell:
+      cmd: "yes | /home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager --licenses"
+      executable: /bin/zsh
+  - name: Set Flutter Android SDK
+    become_user: "pablovarela"
+    ansible.builtin.command:
+      cmd: "/home/pablovarela/Android/flutter/bin/flutter config --android-sdk /home/pablovarela/Android"
+
+  # - name: Set Flutter Android SDK
+  #   become_user: "pablovarela"
+  #   ansible.builtin.command:
+  #     cmd: "flutter config --android-sdk /home/pablovarela/Android"
+  # - name: Set Flutter Android SDK
+  #   become_user: "pablovarela"
+  #   ansible.builtin.command:
+  #     cmd: "/snap/bin/flutter config --android-sdk /home/pablovarela/Android"
+
+  - name: Install Android virtual device system image 
+    become_user: "pablovarela"
+    ansible.builtin.command:
+      cmd: /home/pablovarela/Android/cmdline-tools/latest/bin/sdkmanager 'system-images;android-29;google_apis;x86_64'
+
+  - name: Create Android Virtual Device
+    become_user: "pablovarela"
+    ansible.builtin.command:
+      cmd: /home/pablovarela/Android/cmdline-tools/latest/bin/avdmanager -s create avd -n Pixel4Emulator -k "system-images;android-29;google_apis;x86_64" -d 24 --force
+
+# sudo snap install flutter --classic
+# sudo apt install openjdk-8-jre
+# sudo apt install openjdk-8-jdk
+# cd ~
+# mkdir Android
+# cd Android
+# mkdir cmdline-tools
+# sudo snap install flutter --classic # NOTE: The snap installation gave me problems when using ansible-playbook
+# sudo mv ~/snap/flutter/ ~/Android/ 
+# https://developer.android.com/studio#command-tools : Downlaod Android Command Line Tools for Linux
+# Extract here
+# sudo mv ~/Downloads/commandlinetools-linux-9477386_latest/cmdline-tools/ ~/Android/cmdline-tools/
+# cd ~
+# sudo gedit .zshrc
+# ```
+# export ANDROID=$HOME/Android
+# export PATH=$ANDROID/cmdline-tools/latest:$PATH
+# export PATH=$ANDROID/cmdline-tools/latest/bin:$PATH
+# export PATH=$ANDROID/platform-tools:$PATH
+# # Android SDK
+# export ANDROID_SDK=$HOME/ANDROID
+# export PATH=$ANDROID_SDK:$PATH
+# # Flutter
+# export FLUTTER=$ANDROID/flutter
+# export PATH=$FLUTTER/bin:$PATH
+# ```
+# ~/Android/cmdline-tools/latest/bin/sdkmanager --install "cmdline-tools;latest"
+# sdkmanager "system-images;android-29;google_apis;x86_64"
+# sdkmanager "platforms;android-29"
+# sdkmanager "platform-tools"
+# sdkmanager "patcher;v4"
+# sdkmanager "emulator"
+# sdkmanager "build-tools;29.0.2"
+# sdkmanager --licenses
+# flutter config --android-sdk ~/Android
+# sudo apt-get install android-sdk-platform-tools-common
+# avdmanager list
+# avdmanager -s create avd -n Pixel4Emulator -k "system-images;android-29;google_apis;x86_64" -d 24

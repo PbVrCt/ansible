@@ -1,0 +1,36 @@
+- name: zsh
+  tags:
+    - install
+    - zsh
+  block:
+  - name: Install ZSH
+    apt:
+      name: zsh
+  - name: Install xclip
+    apt:
+      name: xclip
+  - name: Change shell to zsh
+    ansible.builtin.user:
+      name: pablovarela
+      shell: /usr/bin/zsh
+    become: yes
+  - name: Check whether Oh-My-Zsh has been installed
+    stat:
+      path: /home/pablovarela/.oh-my-zsh
+    register: oh_my_stats
+  - name: Install Oh-My-Zsh
+    shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer && chmod +x ~/.oh-my-installer && ~/.oh-my-installer
+    when: oh_my_stats.stat.exists == False
+    become_user: pablovarela
+  - name: Install zsh's powerlevel10k theme
+    ansible.builtin.git:
+      repo: 'https://github.com/romkatv/powerlevel10k.git'
+      dest: "/home/pablovarela/.oh-my-zsh/themes/powerlevel10k"
+  - name: Install zsh-autosuggestions
+    ansible.builtin.git:
+      repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+      dest: "/home/pablovarela/.oh-my-zsh/plugins/zsh-autosuggestions"
+  - name: Install zsh-syntax-highlighting
+    ansible.builtin.git:
+      repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git'
+      dest: "/home/pablovarela/.oh-my-zsh/plugins/zsh-syntax-highlighting"

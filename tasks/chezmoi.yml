@@ -1,0 +1,7 @@
+- name: chezmoi
+  ansible.builtin.snap:
+    name: chezmoi
+    classic: yes
+  tags:
+    - install
+    - chezmoi

@@ -1,0 +1,22 @@
+- name: caps_esc
+  tags:
+  - install
+  - caps_esc
+  block:
+  - name: Install x11-xkb-utils and xkb-data
+    apt:
+      name:
+        - x11-xkb-utils
+        - xkb-data
+      state: present
+  - name: Modify /etc/default/keyboard
+    lineinfile:
+      path: /etc/default/keyboard
+      regexp: '^XKBOPTIONS='
+      line: 'XKBOPTIONS="caps:swapescape"'
+      create: yes
+      state: present
+  - name: Apply caps:swapescape keyboard change
+    ansible.builtin.command:
+      cmd: udevadm trigger --subsystem-match=input --action=change
+    changed_when: false

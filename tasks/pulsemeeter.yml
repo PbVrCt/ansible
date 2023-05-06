@@ -1,0 +1,11 @@
+- name: pulsemeeter
+  tags:
+    - install
+    - pulsemeeter
+  block:
+  - name: Install pulsemeeter requirements
+    apt:
+      name: ["gir1.2-appindicator3-0.1"]
+  - name: Install pulsemeeter
+    pip:
+      name: ["pulsemeeter"]

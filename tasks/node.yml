@@ -1,0 +1,54 @@
+- name: node
+  tags:
+    - install
+    - node
+  block:
+  - name: Remove old Node.js
+    apt:
+      name: nodejs
+      state: absent
+  - name: Remove libnode-dev
+    apt:
+      name: libnode-dev
+      state: absent
+  - name: Remove libnode-dev
+    apt:
+      name: libnode72
+      state: absent
+  - name: Autoremove unused dependencies
+    apt:
+      autoremove: yes
+  - name: Install Node dependencies
+    apt:
+      name:
+        - curl
+        - software-properties-common
+      state: present
+  - name: Add NodeSource GPG key
+    ansible.builtin.apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+  - name: Wait for apt lock to be released
+    become: true
+    ansible.builtin.command:
+      cmd: "flock -w 120 /var/lib/apt/lists/lock true"
+  - name: Add NodeSource repository for Node.js 18
+    ansible.builtin.apt_repository:
+      repo: "deb https://deb.nodesource.com/node_18.x {{ ansible_distribution_release }} main"
+      state: present
+      filename: nodesource
+  - name: Update apt cache
+    apt:
+      update_cache: yes
+  - name: Install Node.js 18
+    apt:
+      name:
+        - nodejs
+      state: present
+    become: true
+  - name: Install bundled npm
+    shell: /usr/bin/npm install -g npm
+    become: true
+  - name: Setup npm config
+    shell: npm config set prefix '/home/pablovarela/.local' ; export PATH=~/.local/bin/:$PATH   
+    become: true

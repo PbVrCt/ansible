@@ -1,0 +1,13 @@
+- name: npm
+  apt:
+    name: ["npm"]
+  tags:
+    - install
+    - npm
+  become: true
+- name: npm config
+  shell: npm config set prefix '/home/pablovarela/.local' ; export PATH=~/.local/bin/:$PATH   
+  tags:
+    - install
+    - npm
+  become: true

@@ -1,0 +1,7 @@
+- name: QDirStat
+  apt:
+    name: [qdirstat]
+  become: true
+  tags:
+    - install
+    - qdirstat

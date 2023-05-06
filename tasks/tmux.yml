@@ -1,0 +1,22 @@
+- name: tmux
+  tags:
+    - install
+    - tmux
+  block:
+  - name: Install tmux
+    apt:
+      name: ["tmux"]
+  - name: Create tmux configuration file
+    become: true
+    become_user: pablovarela
+    shell:
+      cmd: "touch /home/pablovarela/.tmux.conf"
+  - name: Ensure tmux plugins directory exists
+    ansible.builtin.file:
+      path: /home/pablovarela/.tmux/plugins
+      state: directory
+      mode: '0755'
+  - name: Install tmux plugin manager
+    ansible.builtin.git:
+      repo: https://github.com/tmux-plugins/tpm
+      dest: /home/pablovarela/.tmux/plugins/tpm
