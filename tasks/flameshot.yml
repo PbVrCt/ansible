@@ -1,0 +1,6 @@
+- name: flameshot
+  apt:
+    name: ["flameshot"]
+  tags:
+    - install
+    - flameshot

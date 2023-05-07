@@ -32,4 +32,5 @@
   - include: tasks/github_cli.yml
   - include: tasks/pulsemeeter.yml
   - include: tasks/julia.yml
+  - include: tasks/flameshot.yml
   # - include: tasks/flutter.yml
