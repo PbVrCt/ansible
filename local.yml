@@ -33,4 +33,5 @@
   - include: tasks/pulsemeeter.yml
   - include: tasks/julia.yml
   - include: tasks/flameshot.yml
+  - include: tasks/ranger.yml
   # - include: tasks/flutter.yml
