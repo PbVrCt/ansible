@@ -1,0 +1,5 @@
+- name: gitlab_cli
+  command: snap install glab --classic
+  tags:
+    - install
+    - gitlab_cli

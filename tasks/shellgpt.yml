@@ -1,0 +1,6 @@
+- name: Install shell-gpt
+  pip:
+    name: ["shell-gpt==0.9.0"]
+  tags:
+    - install
+    - shellgpt

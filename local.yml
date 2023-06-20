@@ -11,27 +11,33 @@
       - install
       - core 
   tasks:
-  - include: tasks/core.yml
-  - include: tasks/caps_esc.yml
-  - include: tasks/git.yml
-  - include: tasks/i3.yml
-  - include: tasks/tmux.yml
-  - include: tasks/fzf.yml
-  - include: tasks/python.yml
-  - include: tasks/docker.yml
-  - include: tasks/snapd.yml
-  - include: tasks/obsidian.yml
-  - include: tasks/qdirstat.yml
-  - include: tasks/node.yml
-  - include: tasks/zsh.yml
-  - include: tasks/fira_font.yml
-  - include: tasks/code.yml
-  - include: tasks/helix.yml
-  - include: tasks/chezmoi.yml
-  - include: tasks/aws.yml
-  - include: tasks/github_cli.yml
-  - include: tasks/pulsemeeter.yml
-  - include: tasks/julia.yml
-  - include: tasks/flameshot.yml
-  - include: tasks/ranger.yml
-  # - include: tasks/flutter.yml
+  - import_tasks: tasks/core.yml
+  - import_tasks: tasks/caps_esc.yml
+  - import_tasks: tasks/git.yml
+  - import_tasks: tasks/i3.yml
+  - import_tasks: tasks/tmux.yml
+  - import_tasks: tasks/fzf.yml
+  - import_tasks: tasks/python.yml
+  - import_tasks: tasks/docker.yml
+  - import_tasks: tasks/snapd.yml
+  - import_tasks: tasks/obsidian.yml
+  - import_tasks: tasks/qdirstat.yml
+  - import_tasks: tasks/node.yml
+  - import_tasks: tasks/zsh.yml
+  - import_tasks: tasks/fira_font.yml
+  - import_tasks: tasks/code.yml
+  - import_tasks: tasks/helix.yml
+  - import_tasks: tasks/chezmoi.yml
+  - import_tasks: tasks/aws.yml
+  - import_tasks: tasks/github_cli.yml
+  - import_tasks: tasks/pulsemeeter.yml
+  - import_tasks: tasks/julia.yml
+  - import_tasks: tasks/flameshot.yml
+  - import_tasks: tasks/ranger.yml
+  - import_tasks: tasks/brave.yml
+  - import_tasks: tasks/shellgpt.yml
+  - import_tasks: tasks/entr.yml
+  - import_tasks: tasks/gitlab_cli.yml
+  - import_tasks: tasks/rust.yml
+  - import_tasks: tasks/tlp.yml
+  # - import_tasks: tasks/flutter.yml

@@ -1,0 +1,24 @@
+- name: tlp
+  tags:
+    - install
+    - tlp
+  block:
+  # - name: Update the system
+  #   apt:
+  #     update_cache: yes
+
+  - name: Install TLP
+    apt:
+      name: tlp
+      state: present
+
+  - name: Install Powertop
+    apt:
+      name: powertop
+      state: present
+
+  - name: Enable and start TLP service
+    systemd:
+      name: tlp
+      enabled: yes
+      state: started

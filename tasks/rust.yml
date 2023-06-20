@@ -1,0 +1,8 @@
+- name: Download and install Rustup
+  become_user: "{{ ansible_env.SUDO_USER }}"
+  shell: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  args:
+    creates: "$HOME/.cargo/bin/rustup"
+  tags:
+    - install
+    - rust

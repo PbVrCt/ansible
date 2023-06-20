@@ -1,0 +1,7 @@
+
+- name: entr
+  apt:
+    name: ["entr"]
+  tags:
+    - install
+    - entr

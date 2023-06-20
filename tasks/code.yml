@@ -24,10 +24,14 @@
       - vscodevim.vim
       - eamodio.gitlens
       - ms-python.python
+      - python.black-formatter
       - dart-code.flutter
       - dart-code.dart-code
-      - github.copilot
       - amazonwebservices.aws-toolkit-vscode
+      - sleistner.vscode-fileutils
+      - alefragnani.project-manager
+      - andrewbutson.vscode-openai
+      - azuretools.vscode-docker
       - enkia.tokyo-night
     become: true
     become_user: "pablovarela"
